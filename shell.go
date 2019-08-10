@@ -205,6 +205,10 @@ func (s *Shell) ReadPassword(prompt string) (string, error) {
 	return s.liner.PasswordPrompt(prompt)
 }
 
+func (s *Shell) ReadLine(prompt string) (string, error) {
+	return s.liner.Prompt(prompt)
+}
+
 func (Shell) PrintTables(table [][]string, margin int) {
 	var maxLens []int
 	for i, col := range table {
