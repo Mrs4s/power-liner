@@ -3,6 +3,7 @@
 package power_liner
 
 import (
+	"fmt"
 	"syscall"
 	"unsafe"
 )
@@ -15,4 +16,9 @@ func GetTermSize() (int, int, error) {
 		return 0, 0, err
 	}
 	return int(dimensions[1]), int(dimensions[0]), nil
+}
+
+func ClearScreen() error {
+	fmt.Print("\033[2J")
+	return nil
 }

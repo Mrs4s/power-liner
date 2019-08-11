@@ -273,6 +273,10 @@ func (Shell) PrintColumns(strs []string, margin int) {
 	}
 }
 
+func (Shell) ClearScreen() {
+	_ = ClearScreen()
+}
+
 func (s *Shell) OnAbort(f func(int32)) {
 	s.onAbort = f
 }
