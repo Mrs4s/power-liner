@@ -249,7 +249,7 @@ func (Shell) PrintColumns(strs []string, margin int) {
 	numCols, numRows := calculateTableSize(width, margin, maxLength, len(strs))
 	if numCols == 1 {
 		for _, str := range strs {
-			fmt.Println(str)
+			_, _ = fmt.Fprintln(color.Output, str)
 		}
 		return
 	}
@@ -266,10 +266,10 @@ func (Shell) PrintColumns(strs []string, margin int) {
 		spaceStr := strings.Repeat(" ", numSpacesRequired)
 		_, _ = fmt.Fprint(color.Output, str)
 		if x+1 == numCols {
-			fmt.Println()
+			fmt.Fprintln(color.Output)
 		} else {
-			fmt.Print(spaceStr)
-			fmt.Print(marginStr)
+			_, _ = fmt.Fprint(color.Output, spaceStr)
+			_, _ = fmt.Fprint(color.Output, marginStr)
 		}
 	}
 }
