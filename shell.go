@@ -2,6 +2,7 @@ package power_liner
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"github.com/mattn/go-runewidth"
 	"github.com/peterh/liner"
 	"os"
@@ -225,7 +226,7 @@ func (Shell) PrintTables(table [][]string, margin int) {
 	}
 	for _, col := range table {
 		for i, row := range col {
-			fmt.Print(row)
+			_, _ = fmt.Fprint(color.Output, row)
 			if i != len(col)-1 {
 				fmt.Print(strings.Repeat(" ", maxLens[i]-runewidth.StringWidth(row)+margin))
 			}
@@ -263,7 +264,7 @@ func (Shell) PrintColumns(strs []string, margin int) {
 		}
 		numSpacesRequired := maxLength - strLen
 		spaceStr := strings.Repeat(" ", numSpacesRequired)
-		fmt.Print(str)
+		_, _ = fmt.Fprint(color.Output, str)
 		if x+1 == numCols {
 			fmt.Println()
 		} else {
