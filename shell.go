@@ -151,7 +151,7 @@ func (s *Shell) RunAsShell() {
 				cmds = append(cmds, cmd.Alias...)
 			}
 			return filterStrings(cmds, func(s string) bool {
-				return strings.HasPrefix(s, line)
+				return strings.HasPrefix(strings.ToLower(s), strings.ToLower(line))
 			})
 		}
 		return []string{}
