@@ -25,9 +25,11 @@ func parseRaw(line string) (rawArgs []string) {
 	return
 }
 
-func parse(args []string) *Context {
+func parse(line string) *Context {
+	args := parseRaw(line)
 	allTheArgs := &Context{
 		RawArgs: args,
+		RawLine: line,
 	}
 	var nokeyArgsIndices []int
 	flags := make(map[int]string)

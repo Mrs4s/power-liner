@@ -33,6 +33,7 @@ type (
 
 	Context struct {
 		RawArgs []string
+		RawLine string
 		Nokeys  []string
 		Keys    map[string]string
 	}
@@ -124,7 +125,7 @@ func (s *Shell) RunAsShell() {
 					line += " "
 				}
 				if cmd.Completer != nil {
-					pas := cmd.Completer(parse(args))
+					pas := cmd.Completer(parse(line))
 					if strings.HasSuffix(line, " ") {
 						return selectStrings(pas, func(s string) string {
 							str := strings.Join(args[:len(args)-1], " ") + " " + s
@@ -183,7 +184,7 @@ func (s *Shell) RunAsShell() {
 			}
 			if len(rawArgs) > 0 {
 				if command := s.filterCommandByNameOrAlias(rawArgs[0]); command != nil {
-					ctx := parse(rawArgs)
+					ctx := parse(line)
 					handleFunc(command, ctx)
 					continue
 				}
