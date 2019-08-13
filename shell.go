@@ -128,7 +128,12 @@ func (s *Shell) RunAsShell() {
 					pas := cmd.Completer(parse(line))
 					if strings.HasSuffix(line, " ") {
 						return selectStrings(pas, func(s string) string {
-							str := strings.Join(args[:len(args)-1], " ") + " " + s
+							str := strings.Join(selectStrings(args[:len(args)-1], func(s string) string {
+								if strings.Contains(s, " ") {
+									return "\"" + s + "\""
+								}
+								return s
+							}), " ") + " " + s
 							if len(args[:len(args)-1]) == 0 {
 								str = args[0] + str
 							}
@@ -201,6 +206,35 @@ func (s *Shell) RunAsShell() {
 			}
 		}
 	}
+}
+
+func (s *Shell) RunAsCli(args []string) {
+	line := strings.Join(args, " ")
+	ctx := parse(line)
+	handleFunc := func(cmd *Command, ctx *Context) {
+		defer func() {
+			if pan := recover(); pan != nil {
+				fmt.Println("error to handle command", cmd.Name, ":", pan)
+				os.Exit(-1)
+			}
+		}()
+		if cmd.Before != nil {
+			cmd.Before(ctx)
+		}
+		if cmd.Handler != nil {
+			cmd.Handler(ctx)
+		}
+		if cmd.After != nil {
+			cmd.After(ctx)
+		}
+	}
+	if len(ctx.RawArgs) > 0 {
+		if command := s.filterCommandByNameOrAlias(ctx.RawArgs[0]); command != nil {
+			handleFunc(command, ctx)
+			return
+		}
+	}
+	fmt.Println("Unknown command")
 }
 
 func (s *Shell) ReadPassword(prompt string) (string, error) {
